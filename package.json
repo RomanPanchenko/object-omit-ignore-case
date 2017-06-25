@@ -1,0 +1,32 @@
+{
+  "name": "object-omit-ignore-case",
+  "version": "0.0.1",
+  "description": "Analog for lodash \"omit\", but with possibility to ignore case of omitted properties",
+  "main": "index.js",
+  "scripts": {
+    "test": "_mocha || true"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RomanPanchenko/object-omit-ignore-case.git"
+  },
+  "keywords": [
+    "omit",
+    "ignore",
+    "case",
+    "skip",
+    "property",
+    "properties"
+  ],
+  "author": "Roman Panchenko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RomanPanchenko/object-omit-ignore-case/issues"
+  },
+  "homepage": "https://github.com/RomanPanchenko/object-omit-ignore-case#readme",
+  "devDependencies": {
+    "chai": "^4.0.2",
+    "lodash": "^4.17.4",
+    "mocha": "^3.4.2"
+  }
+}
