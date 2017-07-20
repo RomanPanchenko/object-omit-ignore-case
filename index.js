@@ -1,20 +1,35 @@
 'use strict';
 
+function cloneDeep(from, to) {
+    if (from === null || typeof from !== 'object') return from;
+
+    if (from.constructor !== Object && from.constructor !== Array) return from;
+
+    if (from.constructor === Date || from.constructor === RegExp || from.constructor === Function ||
+        from.constructor === String || from.constructor === Number || from.constructor === Boolean ||
+        from.constructor === Promise) {
+
+        return new from.constructor(from);
+    }
+
+    to = to || new from.constructor();
+
+    Object.getOwnPropertyNames(from).forEach(function (name) {
+        to[name] = typeof to[name] === 'undefined' ? cloneDeep(from[name], null) : to[name];
+    });
+
+    return to;
+}
+
 /**
  *
  * @param props
- * @param ignoreCase
  * @return {Object}
  */
-function createPropertiesMap(props, ignoreCase) {
+function createPropertiesMap(props) {
     var result = {};
-    if (!props) {
-        props = [];
-    }
-
-    if (typeof props === 'string') {
-        props = [1].map(function () {return props});
-    }
+    props = props ? props : [];
+    props = typeof props === 'string' ? [props] : props;
 
     if (!Array.isArray(props)) {
         return result;
@@ -24,9 +39,30 @@ function createPropertiesMap(props, ignoreCase) {
         if (typeof props[i] !== 'string') continue;
         var seq = props[i].split('.');
         var root = result;
-        var prop;
+        var prop, propLowerCase;
         for (var j = 0; j < seq.length; j++) {
-            prop = ignoreCase ? seq[j].toLowerCase() : seq[j];
+            prop = seq[j];
+
+            if (prop.slice(-2) === '/i') {
+                prop = prop.toLowerCase();
+                propLowerCase = prop.slice(-1) + '/';
+                if (propLowerCase in root) {
+                    var sameNameProps = root[propLowerCase];
+                    for (var k = 0; k < sameNameProps.length; k++) {
+                        delete root[sameNameProps[k]];
+                    }
+
+                    delete root[propLowerCase];
+                }
+            } else {
+                propLowerCase = prop.toLowerCase();
+                var propSameNameRoot = propLowerCase + '//';
+                if (!root[propSameNameRoot]) {
+                    root[propSameNameRoot] = [];
+                }
+
+                root[propSameNameRoot].push(prop);
+            }
 
             if (j >= seq.length - 1) {
                 root[prop] = undefined;
@@ -50,18 +86,18 @@ function createPropertiesMap(props, ignoreCase) {
  * @param src
  * @param dst
  * @param propMap
- * @param ignoreCase
  */
-function copyProperties(src, dst, propMap, ignoreCase) {
+function copyProperties(src, dst, propMap) {
     var newDst = Object.assign(dst, src);
     var props = Object.getOwnPropertyNames(newDst);
     for (var i = 0; i < props.length; i++) {
         var prop = props[i];
-        var propInPropMap = ignoreCase ? prop.toLowerCase() : prop;
-        if ((propInPropMap in propMap) && propMap[propInPropMap] === undefined) {
+        var prop_i = prop.toLowerCase() + '/i';
+
+        if ((prop_i in propMap) && !propMap[prop_i]) {
             delete newDst[prop];
-        } else if (typeof propMap[propInPropMap] === 'object' && typeof newDst[prop] === 'object') {
-            newDst[prop] = copyProperties(src[prop], newDst[prop], propMap[propInPropMap], ignoreCase);
+        } else if ((propMap[prop_i] || propMap[prop]) && typeof newDst[prop] === 'object') {
+            newDst[prop] = copyProperties(src[prop], newDst[prop], propMap[prop_i] || propMap[prop]);
         }
     }
 
@@ -72,16 +108,10 @@ function copyProperties(src, dst, propMap, ignoreCase) {
  *
  * @param src
  * @param props
- * @param ignoreCase
  */
-function omit(src, props, ignoreCase) {
-    if (ignoreCase === undefined) {
-        ignoreCase = true;
-    }
-
-    var propMap = createPropertiesMap(props, ignoreCase);
-    var dst = copyProperties(src, {}, propMap, ignoreCase);
-    return dst;
+function omit(src, props) {
+    if (!src || typeof src !== 'object') return null;
+    return copyProperties(cloneDeep(src), {}, createPropertiesMap(props));
 }
 
 

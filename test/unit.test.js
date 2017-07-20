@@ -82,6 +82,14 @@ describe('Object omit', function () {
         expect(src).to.be.deep.equal(dst);
     });
 
+    it('should return object without MyProp5_Sub1_Sub1 & MyProp5_Sub1 properties AAAA', function () {
+        var mySrc = _.cloneDeep(sourceObject);
+        var src = _.omit(sourceObject, ['MyProp5.MyProp5_Sub1', 'MyProp5.MyProp5_Sub1.MyProp5_Sub1_Sub1']);
+        //var dst = objectOmitIgnoreCase(sourceObject, ['MyProp5.MyProp5_Sub1.MyProp5_Sub1_Sub1', 'MyProp5.MyProp5_Sub1'], false);
+        //expect(src).to.be.deep.equal(dst);
+        expect(mySrc).to.be.deep.equal(sourceObject);
+
+    });
 
     it('should return object without MyProp5_Sub1_Sub1_Sub3 properties', function () {
         var src = _.omit(sourceObject, ['MyProp5.MyProp5_Sub1.MyProp5_Sub1_Sub1.MyProp5_Sub1_Sub1_Sub3']);
