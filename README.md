@@ -12,13 +12,13 @@ npm install object-omit-ignore-case --save
 ```js
 var req = {
     headers: {
-        X-HTTP-Header: 'value',
+        'X-HTTP-Header': 'value',
         Auth: 'value'
     },
     body: {
         LOG: {
-            Body-Param1: 1,
-            Body-Param2: 2,
+            'Body-Param1': 1,
+            'Body-Param2': 2,
         }
     }
 };

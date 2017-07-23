@@ -1,6 +1,6 @@
 {
   "name": "object-omit-ignore-case",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Analog for lodash \"omit\", but with possibility to ignore case of omitted properties",
   "main": "index.js",
   "scripts": {
