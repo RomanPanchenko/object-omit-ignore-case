@@ -2,7 +2,7 @@
 
 ### Analog for [lodash "omit"](https://lodash.com/docs/4.17.4#omit), but with possibility to ignore case of omitted properties
 
-**1. Install the package **
+**1. Install the package**
 
 ```sh
 npm install object-omit-ignore-case --save
@@ -17,7 +17,8 @@ var req = {
     },
     body: {
         LOG: {
-                Body-Param1: 1
+            Body-Param1: 1,
+            Body-Param2: 2,
         }
     }
 };
@@ -29,6 +30,11 @@ var objectToLog = omit_ic(req, ['headers.x-http-header/i', 'body.log/i.body-para
 objectToLog = {
     headers: {
       Auth: 'value'
+    },
+    body: {
+        LOG: {
+            Body-Param2: 2
+        }
     }
 }
 */
