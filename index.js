@@ -94,10 +94,15 @@ function copyProperties(src, dst, propMap) {
         var prop = props[i];
         var prop_i = prop.toLowerCase() + '/i';
 
-        if ((prop_i in propMap) && !propMap[prop_i]) {
-            delete newDst[prop];
-        } else if ((propMap[prop_i] || propMap[prop]) && typeof newDst[prop] === 'object') {
-            newDst[prop] = copyProperties(src[prop], newDst[prop], propMap[prop_i] || propMap[prop]);
+        var propertyCaseInsensitive = prop_i in propMap;
+        var propertyCaseSensitive = prop in propMap;
+
+        if (propertyCaseInsensitive || propertyCaseSensitive) {
+            if ((propertyCaseInsensitive && (typeof propMap[prop_i] !== 'object')) || (propertyCaseSensitive && (typeof propMap[prop] !== 'object'))) {
+                delete newDst[prop];
+            } else {
+                newDst[prop] = copyProperties(src[prop], newDst[prop], propertyCaseInsensitive ? propMap[prop_i] : propMap[prop]);
+            }
         }
     }
 
@@ -109,10 +114,10 @@ function copyProperties(src, dst, propMap) {
  * @param src
  * @param props
  */
-function omit(src, props) {
+function aoo(src, props) {
     if (!src || typeof src !== 'object') return null;
     return copyProperties(cloneDeep(src), {}, createPropertiesMap(props));
 }
 
 
-module.exports = omit;
+module.exports = aoo;
