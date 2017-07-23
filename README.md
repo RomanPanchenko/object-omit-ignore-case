@@ -3,6 +3,7 @@
 ### Analog for [lodash "omit"](https://lodash.com/docs/4.17.4#omit), but with possibility to ignore case of omitted properties
 
 **1. Install the package **
+
 ```sh
 npm install object-omit-ignore-case --save
 ```
