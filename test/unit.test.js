@@ -101,10 +101,4 @@ describe('Object omit', function () {
         expect(src).to.be.deep.equal(dst);
     });
 
-    it('should return object without MyProp5_Sub1_Sub1_Sub3 property', function () {
-        var src = _.omit(sourceObject, ['MyProp5.MyProp5_Sub1.MyProp5_Sub1_Sub1.MyProp5_Sub1_Sub1_Sub3']);
-        var dst = aoo(sourceObject, ['MyProp5./MyProp5_(Sub1|sUb2)/i']);
-        expect(src).to.be.deep.equal(dst);
-    });
-
 });
